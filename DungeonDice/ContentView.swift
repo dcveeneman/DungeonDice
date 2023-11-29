@@ -34,18 +34,11 @@ struct ContentView: View {
         
         GeometryReader { geo in
             VStack {
-                Text("Dungeon Dice")
-                    .font(.largeTitle)
-                    .fontWeight(.black)
-                    .foregroundColor(.red)
+                titleView
                 
                 Spacer()
                 
-                Text(resultMessage)
-                    .font(.largeTitle)
-                    .fontWeight(.medium)
-                    .multilineTextAlignment(.center)
-                    .frame(height: 150)
+                resultMessageView
                 
                 Spacer()
                 
@@ -75,17 +68,17 @@ struct ContentView: View {
             }
             .padding()
             .onChange(of: geo.size.width, { oldValue, newValue in
-                arrangeGridItems(geo: geo)
+                arrangeGridItems(deviceWidth: geo.size.width)
             })
             .onAppear {
-                arrangeGridItems(geo: geo)
+                arrangeGridItems(deviceWidth: geo.size.width)
             }
         }
     }
     
-    func arrangeGridItems(geo: GeometryProxy) {
+    func arrangeGridItems(deviceWidth: CGFloat) {
         // Calculate width of screen, net of left and right padding
-        var screenWidth = geo.size.width - horizontalPadding * 2
+        var screenWidth = deviceWidth - horizontalPadding * 2
         
         // Adjust for spacing between items
         if Dice.allCases.count > 1 {
@@ -98,6 +91,24 @@ struct ContentView: View {
     }
 }
 
+extension ContentView {
+    private var titleView: some View {
+        Text("Dungeon Dice")
+            .font(.largeTitle)
+            .fontWeight(.black)
+            .foregroundColor(.red)
+    }
+    
+    private var resultMessageView: some View {
+        Text(resultMessage)
+            .font(.largeTitle)
+            .fontWeight(.medium)
+            .multilineTextAlignment(.center)
+            .frame(height: 150)
+    }
+}
+
 #Preview {
     ContentView()
 }
+
